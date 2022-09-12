@@ -18,24 +18,37 @@ $beige: #F9CF93;
 body {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(45deg, $creamGreen, $beige);
+    background: linear-gradient(45deg, $creamGreen, $beige 60%);
     display: grid;
     place-items: center;
 }
 
 .timer {
-    width: 80vw;
-    height: 30vh;
+    width: 50vw;
+    height: clamp(425px, 40vh, 50vh);
     border: 1px solid $green;
     box-shadow: 0 0 2px 8px $darkenGreen
 }
 
+@media only screen and (max-width: 1080px) {
+    .timer {
+        width: 80vw;
+    }
+}
+
+@media only screen and (max-height: 1000px) {
+    .timer {
+        height: 50vh;
+    }
+}
+
 .head {
+    padding-top: 1rem;
     text-align: center;
 }
 
 .displayShow {
-    border: 2px solid $darkenGreen;
+    // border: 2px solid $darkenGreen;
     padding: 1rem 0;   
 }
 
@@ -59,7 +72,7 @@ body {
     // border: 1px solid black;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -93,11 +106,24 @@ body {
     cursor: pointer;
 }
 
+.button::before {
+    content: "";
+    height: 20px;
+    width: 0;
+    border-bottom: 1px solid black;
+    position: absolute;
+}
+
+.button:hover::before {
+    width: 150px;
+    transition: ease-in-out .5s;
+}
+
 .button:hover {
     transition: ease-in-out 0.5s;
     transform: translateY(-0.25rem);
     box-shadow: 0 0 2px 6px $creamGreen,
                 0 0 2px 8px $green,
                 0 0 2px 10px $darkenGreen;
-    color: $darkenGreen;
+    color: darken(lime, 15%);
 }

@@ -7,6 +7,7 @@ function App() {
   const [pomoMinute, setPomoMinute] = useState(26);
   const [breakSecond, setBreakSecond] = useState(0);
   const [breakMinute, setBreakMinute] = useState(6);
+  const [isOn, setIsOn] = useState(true)
   const [isActive, setIsActive] = useState(false);
   const [breakActive, setBreakActive] = useState(false);
   const [amount, setAmount] = useState(2);
@@ -22,7 +23,7 @@ function App() {
   
 // Pomo Timer
 useEffect(() => {
-  if (isActive && amount !== 0) {
+  if (isActive && amount !== 0 && isOn) {
     const timer = setInterval(() => setPomoSecond(pomoSecond => pomoSecond - 1), 1000);
       if (pomoSecond === 0) {
         setTimeout(() => {
@@ -41,11 +42,11 @@ useEffect(() => {
       }
       
       return () => clearInterval(timer);
-    }}, [pomoSecond, pomoMinute, isActive, breakActive, amount])
+    }}, [pomoSecond, pomoMinute, isActive, breakActive, amount, isOn])
 
 // Break Timer
 useEffect(() => {
-  if (breakActive && amount !== 0) {
+  if (breakActive && amount !== 0 && isOn) {
     const timer = setInterval(() => setBreakSecond(breakSecond => breakSecond - 1), 1000);
 
     if (breakSecond === 0) {
@@ -68,7 +69,7 @@ useEffect(() => {
 
     return () => clearInterval(timer);
   }
-}, [breakSecond, breakMinute, pomoMinute, breakActive, isActive, amount])
+}, [breakSecond, breakMinute, pomoMinute, breakActive, isActive, amount, isOn])
 
 
 // sound break
@@ -83,9 +84,9 @@ useEffect(() => {
   tone.volume = 0.1;
   tone.play();
  }
-// start/pause focus
+// start
 const handleActive = () => {
-  setIsActive(!isActive);
+  breakActive ? setIsActive(false) : setIsActive(!isActive);
 }
 // add time
 const addSec = () => {
@@ -115,12 +116,16 @@ const subAmount = () => {
     : setAmount(amount => amount - 1)
   } 
 }
-
+// reset
 const reset = () => {
   setIsActive(false);
   setBreakActive(false);
   setPomoSecond(0);
   setPomoMinute(26);
+}
+// pause
+const pause = () => {
+  setIsOn(!isOn)
 }
       
 return (  
@@ -157,7 +162,8 @@ return (
       <div className="button decrease" onClick={subAmount}>Decrease session</div>
     </div>
     <div className="startStop">
-      <div className="button start" onClick={handleActive}>start/pause</div>
+      <div className="button start" onClick={handleActive}>start</div>
+      <div className="button" onClick={pause}>Pause</div>
       <div className="button reset" onClick={reset}>Reset</div>
     </div>
   </div>
