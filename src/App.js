@@ -75,13 +75,13 @@ useEffect(() => {
 // sound break
  const playToneBreak = () => {
   const tone = document.getElementById("audioClock");
-  tone.volume = 0.1;
+  tone.volume = 0.05;
   tone.play();
  }
 // sound focus
  const playToneStart = () => {
   const tone = document.getElementById("audioRacing");
-  tone.volume = 0.1;
+  tone.volume = 0.05;
   tone.play();
  }
 // start
@@ -141,11 +141,11 @@ return (
       breakActive ? 
       <div className="breakTimer" id="breakTimer">
         <h1 className="break">Break!</h1>
-        <h2>{displayBreakMinute}:{displayBreakSecond}</h2>
+        <div className="clock">{displayBreakMinute}:{displayBreakSecond}</div>
       </div> 
     : <div className="pomoTimer" id="pomoTimer">
         <h1 className="pomo">Focus!</h1>
-        <h2>{displayPomoMinute}:{displayPomoSecond}</h2>
+        <div className="clock">{displayPomoMinute}:{displayPomoSecond}</div>
       </div>
     }
   </div>
@@ -156,15 +156,15 @@ return (
 
   <div className="buttonHolder">
     <div className="control">
-      <div className="button add" onClick={addSec}>Add time</div>
-      <div className="button decrease" onClick={subSec}>Decrease time</div>
-      <div className="button add" onClick={addAmount}>Add session</div>
-      <div className="button decrease" onClick={subAmount}>Decrease session</div>
+      <div className="button" onClick={addSec}>➕ time</div>
+      <div className="button" onClick={subSec}>➖ time</div>
+      <div className="button" onClick={addAmount}>➕ session</div>
+      <div className="button" onClick={subAmount}>➖ session</div>
     </div>
     <div className="startStop">
-      <div className="button start" onClick={handleActive}>start</div>
+      <div className="button" onClick={handleActive}>start</div>
       <div className="button" onClick={pause}>Pause</div>
-      <div className="button reset" onClick={reset}>Reset</div>
+      <div className="button" onClick={reset}>Reset</div>
     </div>
   </div>
    {/* <p>second {breakSecond}</p>

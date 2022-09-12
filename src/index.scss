@@ -21,13 +21,17 @@ body {
     background: linear-gradient(45deg, $creamGreen, $beige 60%);
     display: grid;
     place-items: center;
+    letter-spacing: 1.5px;
+    color: darken($darkenGreen, 20%);
 }
 
 .timer {
     width: 50vw;
-    height: clamp(425px, 40vh, 50vh);
+    height: clamp(425px, 35vh, 50vh);
     border: 1px solid $green;
-    box-shadow: 0 0 2px 8px $darkenGreen
+    box-shadow: 0 0 2px 1px darken(lime, 10%),
+                0 0 2px 4px $green,
+                0 0 2px 8px $darkenGreen;
 }
 
 @media only screen and (max-width: 1080px) {
@@ -45,6 +49,8 @@ body {
 .head {
     padding-top: 1rem;
     text-align: center;
+    text-transform: uppercase;
+    color: darken($darkenGreen, 30%)
 }
 
 .displayShow {
@@ -53,14 +59,21 @@ body {
 }
 
 .pomoTimer, .breakTimer {
+    text-transform: uppercase;
     display: grid;
     place-items: center;
     transition: ease-in-out 1s;
 }
 
+.clock {
+    font-size: 65px;
+    letter-spacing: 4px;
+}
+
 .timerDisplay {
     display: grid;
     place-items: center;
+    font-size: 20px;
     font-weight: bold;
     padding: 1rem;
     text-transform: uppercase;
@@ -72,58 +85,57 @@ body {
     // border: 1px solid black;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-
-
-.control {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
-}
-
-.startStop {
-    width: 100%;
-    padding: 1rem;
-    margin: 0 1rem;
-    display: flex;
     justify-content: space-around;
+    align-items: center;
+    text-transform: uppercase;
+    user-select: none;
+    cursor: pointer;
+
+    .control {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+    }
+    
+    .startStop {
+        width: 100%;
+        padding: 1rem;
+        margin: 0 1rem;
+        display: flex;
+        justify-content: space-around;
+    }
 }
 
 .button {
     width: 180px;
     height: 50px;
-    border: 1px solid black;
+    border: 1px solid darken($darkenGreen, 10%);
     border-radius: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-transform: uppercase;
-    user-select: none;
-    cursor: pointer;
 }
 
 .button::before {
     content: "";
-    height: 20px;
+    height: 30px;
     width: 0;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid darken($darkenGreen, 10%);
     position: absolute;
 }
 
 .button:hover::before {
-    width: 150px;
+    width: 105px;
     transition: ease-in-out .5s;
 }
 
 .button:hover {
     transition: ease-in-out 0.5s;
     transform: translateY(-0.25rem);
-    box-shadow: 0 0 2px 6px $creamGreen,
-                0 0 2px 8px $green,
-                0 0 2px 10px $darkenGreen;
+    box-shadow: 0 0 2px 4px $creamGreen,
+                0 0 2px 6px $green,
+                0 0 2px 8px $darkenGreen;
     color: darken(lime, 15%);
 }
