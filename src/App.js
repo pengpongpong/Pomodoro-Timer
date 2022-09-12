@@ -3,15 +3,22 @@ import {useEffect, useState} from "react";
 
 
 function App() {
-  const [pomoSecond, setPomoSecond] = useState(5);
-  const [pomoMinute, setPomoMinute] = useState(2);
-  const [breakSecond, setBreakSecond] = useState(5);
-  const [breakMinute, setBreakMinute] = useState(2);
+  const [pomoSecond, setPomoSecond] = useState(0);
+  const [pomoMinute, setPomoMinute] = useState(26);
+  const [breakSecond, setBreakSecond] = useState(0);
+  const [breakMinute, setBreakMinute] = useState(6);
   const [isActive, setIsActive] = useState(false);
   const [breakActive, setBreakActive] = useState(false);
   const [amount, setAmount] = useState(2);
 
-  const showMinute = pomoMinute === 0 ? 0 : pomoMinute - 1;
+  const showPomoMinute = pomoMinute === 0 ? 0 : pomoMinute - 1;
+  const displayPomoMinute = showPomoMinute < 10 ? "0" + showPomoMinute : showPomoMinute;
+  const displayPomoSecond = pomoSecond < 10 ? "0" + pomoSecond : pomoSecond;
+
+
+  const showBreakMinute = breakMinute === 0 ? 0 : breakMinute - 1;
+  const displayBreakMinute = showBreakMinute < 10 ? "0" + showBreakMinute : showBreakMinute;
+  const displayBreakSecond = breakSecond < 10 ? "0" + breakSecond : breakSecond;
   
 // Pomo Timer
 useEffect(() => {
@@ -19,7 +26,7 @@ useEffect(() => {
     const timer = setInterval(() => setPomoSecond(pomoSecond => pomoSecond - 1), 1000);
       if (pomoSecond === 0) {
         setTimeout(() => {
-          setPomoSecond(5);
+          setPomoSecond(59);
           setPomoMinute(pomoMinute => pomoMinute - 1);
         }, 1000)     
       }
@@ -30,6 +37,7 @@ useEffect(() => {
       setAmount(amount => amount -1)
       setIsActive(!isActive)
       setBreakActive(!breakActive)
+      setBreakMinute(6)
       }
       
       return () => clearInterval(timer);
@@ -42,18 +50,19 @@ useEffect(() => {
 
     if (breakSecond === 0) {
       setTimeout(() => {
-        setBreakSecond(5)
+        setBreakSecond(59)
         setBreakMinute(breakMinute => breakMinute - 1)
       }, 1000)
       
     }
+
 
     if (breakMinute === 0) {
       clearInterval(timer)
       playToneStart()
       setBreakActive(!breakActive)
       setIsActive(!isActive)
-      setPomoMinute(1)
+      setPomoMinute(26)
       
     }
 
@@ -62,64 +71,101 @@ useEffect(() => {
 }, [breakSecond, breakMinute, pomoMinute, breakActive, isActive, amount])
 
 
-  
+// sound break
  const playToneBreak = () => {
   const tone = document.getElementById("audioClock");
-  tone.volume = 0.2;
+  tone.volume = 0.1;
   tone.play();
  }
-
+// sound focus
  const playToneStart = () => {
   const tone = document.getElementById("audioRacing");
-  tone.volume = 0.2;
+  tone.volume = 0.1;
   tone.play();
  }
-
-
-  const handleActive = () => {
-    setIsActive(!isActive)
-  }
-
-  const addSec = () => {
-    setPomoSecond(pomoSecond => pomoSecond + 1)
-  }
-
-  const subSec = () => {
-    pomoSecond === 0
-    ? setPomoSecond(0)
-    : setPomoSecond(pomoSecond => pomoSecond - 1)
-  }
-
-  const addAmount = () => {
+// start/pause focus
+const handleActive = () => {
+  setIsActive(!isActive);
+}
+// add time
+const addSec = () => {
+  if (!isActive) {
+    setPomoMinute(pomoMinute => pomoMinute + 1)
+  }  
+}
+// sub time
+const subSec = () => {
+  if (!isActive) {
+    pomoMinute === 0
+    ? setPomoMinute(0)
+    : setPomoMinute(pomoMinute => pomoMinute - 1)
+  } 
+}
+// add session
+const addAmount = () => {
+  if (!isActive) {
     setAmount(amount => amount + 1)
-  }
+  } 
+}
+// sub session
+const subAmount = () => {
+  if (!isActive) {
+    amount === 0
+    ? setAmount(0)
+    : setAmount(amount => amount - 1)
+  } 
+}
 
-  const subAmount = () => {
-   amount === 0
-   ? setAmount(0)
-   : setAmount(amount => amount - 1)
-    
-  }
+const reset = () => {
+  setIsActive(false);
+  setBreakActive(false);
+  setPomoSecond(0);
+  setPomoMinute(26);
+}
       
-  return (  
-    <div>
-    <audio src="https://res.cloudinary.com/pengpengong/video/upload/v1662663906/mixkit-racing-countdown-timer-1051_mcd5op.wav" id="audioRacing">
-    </audio>
-    <audio src="https://res.cloudinary.com/pengpengong/video/upload/v1662664556/mixkit-clock-bells-hour-signal-1069_m0vcfy.wav" id="audioClock">
-    </audio>
-    <button onClick={addSec}>ADD</button>
-    <button onClick={subSec}>SUB</button>
-    <button onClick={addAmount}>Add Amount</button>
-    <button onClick={subAmount}>Sub Amount</button>
-    <button onClick={handleActive}>Start Timer</button>
-    <p>Pomo Seconds: {pomoSecond}</p>
-    <p>Pomo Minute: {pomoMinute}</p>
-    <p>Pomo Minute: {showMinute}</p>
-    <p>Break Seconds: {breakSecond}</p>
-    <p>Break Minute: {breakMinute}</p>
-    <p>Amount: {amount}</p>
+return (  
+  <div className="timer">
+  <h1 className="head">Pomodoro-Timer</h1>
+  <audio src="https://res.cloudinary.com/pengpengong/video/upload/v1662663906/mixkit-racing-countdown-timer-1051_mcd5op.wav" id="audioRacing">
+  </audio>
+  <audio src="https://res.cloudinary.com/pengpengong/video/upload/v1662664556/mixkit-clock-bells-hour-signal-1069_m0vcfy.wav" id="audioClock">
+  </audio>
+
+  <div className="displayShow">
+    {
+      breakActive ? 
+      <div className="breakTimer" id="breakTimer">
+        <h1 className="break">Break!</h1>
+        <h2>{displayBreakMinute}:{displayBreakSecond}</h2>
+      </div> 
+    : <div className="pomoTimer" id="pomoTimer">
+        <h1 className="pomo">Focus!</h1>
+        <h2>{displayPomoMinute}:{displayPomoSecond}</h2>
+      </div>
+    }
+  </div>
+
+  <div className="timerDisplay">
+    <div>Session: {amount}</div>
+  </div>
+
+  <div className="buttonHolder">
+    <div className="control">
+      <div className="button add" onClick={addSec}>Add time</div>
+      <div className="button decrease" onClick={subSec}>Decrease time</div>
+      <div className="button add" onClick={addAmount}>Add session</div>
+      <div className="button decrease" onClick={subAmount}>Decrease session</div>
     </div>
-  )
+    <div className="startStop">
+      <div className="button start" onClick={handleActive}>start/pause</div>
+      <div className="button reset" onClick={reset}>Reset</div>
+    </div>
+  </div>
+   {/* <p>second {breakSecond}</p>
+  <p>minute {breakMinute}</p>
+    <div>Time: {displayPomoMinute}:{displayPomoSecond}</div> */}
+  </div>
+)
 }
 
 export default App;
