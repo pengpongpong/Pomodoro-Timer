@@ -31,8 +31,6 @@ function App() {
       
         if (pomoSecond === 0) { 
           setTimeout(() => {
-            console.log("useEffect")
-            // setPomoSecond(59);
             dispatch(decrementPomoMinute())
           }, 1000)     
         }
@@ -42,8 +40,8 @@ function App() {
             clearInterval(timer)
             playToneBreak();
             setIsActive(!isActive)
-            setBreakActive(!breakActive)
             dispatch(setBreakMinuteByAmount(5))
+            setBreakActive(!breakActive)
           }, 1000)
         }
 
@@ -67,8 +65,8 @@ function App() {
           clearInterval(timer)
           playToneStart()
           setBreakActive(!breakActive)
-          setIsActive(!isActive)
           dispatch(setPomoMinuteByAmount(25))
+          setIsActive(!isActive)
         }, 900)   
       }
 
@@ -87,12 +85,14 @@ function App() {
       : document.title = "Pomodoro-Timer"
     };
 
-    if (isActive || breakActive) {
-      title()
-    }
-    if (!isActive && !breakActive) {
-      title()
-    }
+    title()
+
+    // if (isActive || breakActive) {
+    //   title()
+    // }
+    // if (!isActive && !breakActive) {
+    //   title()
+    // }
   })
 
   // sound break
