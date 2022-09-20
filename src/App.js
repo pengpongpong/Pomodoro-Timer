@@ -48,6 +48,7 @@ function App() {
         }
 
         return () => clearInterval(timer);
+        // eslint-disable-next-line 
       }}, [pomoSecond, pomoMinute, isActive, breakActive, amount, isOn])
   
   // Break Timer
@@ -73,15 +74,16 @@ function App() {
 
       return () => clearInterval(timer);
     }
+    // eslint-disable-next-line 
   }, [breakSecond, breakMinute, pomoMinute, breakActive, isActive, amount, isOn])
 
   // change html title to timer, when active
   useEffect(() => {
     const title = () => {
       breakActive 
-      ? document.title = displayBreakMinute + ":" + displayBreakSecond
+      ? document.title = `Break! ${displayBreakMinute}:${displayBreakSecond}` 
       : isActive 
-      ? document.title = displayPomoMinute + ":" + displayPomoSecond
+      ? document.title = `Focus! ${displayPomoMinute}:${displayPomoSecond}`
       : document.title = "Pomodoro-Timer"
     };
 

@@ -16,7 +16,7 @@ export const breakTime = createSlice({
         decrementBreakSecond: (state) => {
             state.valueSec === 0 && state.valueMin === 0
             ? state.valueSec = 0
-            : state.valueSec === 0 && state.valueMin != 0 
+            : state.valueSec === 0 && state.valueMin !== 0 
             ? state.valueSec = 59
             : state.valueSec -= 1;
         }
