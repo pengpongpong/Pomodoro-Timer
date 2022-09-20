@@ -1,12 +1,12 @@
 import './index.css';
 import {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {incrementSession, decrementSession, sessionCount} from "./redux/sessionSlice.js";
-import {incrementPomoMinute, decrementPomoMinute, setPomoMinuteByAmount, pomoMinuteCount, decrementPomoSecond, pomoSecondCount, decrementPomoSecondByAmound} from "./redux/pomoTime.js";
-import {decrementBreakMinute, setBreakMinuteByAmount, decrementBreakSecond, breakMinuteCount, breakSecondCount} from "./redux/breakTime.js"
+import {incrementSession, decrementSession, sessionCount, setSessionByAmount} from "./redux/session.js";
+import {incrementPomoMinute, decrementPomoMinute, setPomoMinuteByAmount, pomoMinuteCount, decrementPomoSecond, pomoSecondCount, decrementPomoSecondByAmount, decrementPomoMinuteAuto} from "./redux/pomoTime.js";
+import {decrementBreakMinute, setBreakMinuteByAmount, decrementBreakSecond, breakMinuteCount, breakSecondCount} from "./redux/breakTime.js";
 
 function App() {
-  const [isOn, setIsOn] = useState(true)
+  const [isOn, setIsOn] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [breakActive, setBreakActive] = useState(false);
 
@@ -18,81 +18,90 @@ function App() {
   const breakMinute = useSelector(breakMinuteCount);
   const breakSecond = useSelector(breakSecondCount);
 
-  // show time, add 0 in front, when < 10 
+  // show time, add 0 in front, when minute/second is < 10 
   const displayPomoMinute = pomoMinute < 10 ? "0" + pomoMinute : pomoMinute;
   const displayPomoSecond = pomoSecond < 10 ? "0" + pomoSecond : pomoSecond;
   const displayBreakMinute = breakMinute < 10 ? "0" + breakMinute : breakMinute;
   const displayBreakSecond = breakSecond < 10 ? "0" + breakSecond : breakSecond;
 
-  // Pomo Timer
+  // POMO TIMER
+  // pomo timer second decrease
   useEffect(() => {
     if (isActive && amount !== 0 && isOn) {
-      const timer = setInterval(() => dispatch(decrementPomoSecond()), 1000);     
-      
-        if (pomoSecond === 0) { 
-          setTimeout(() => {
-            dispatch(decrementPomoMinute())
-          }, 1000)     
-        }
-
-        if (pomoMinute === 0 && pomoSecond === 0) {
-          setTimeout(() => {
-            clearInterval(timer)
-            playToneBreak();
-            setIsActive(!isActive)
-            dispatch(setBreakMinuteByAmount(5))
-            setBreakActive(!breakActive)
-          }, 1000)
-        }
+      const timer = setInterval(() => dispatch(decrementPomoSecond()), 1000);  
 
         return () => clearInterval(timer);
-        // eslint-disable-next-line 
-      }}, [pomoSecond, pomoMinute, isActive, breakActive, amount, isOn])
-  
-  // Break Timer
+      // eslint-disable-next-line 
+      }}, [isActive, amount, isOn])
+
+  // pomo timer minute decease
+  useEffect(() => {
+    if (pomoSecond === 0 && pomoMinute > 0 && isActive && isOn) { 
+      setTimeout(() => {
+        dispatch(decrementPomoMinuteAuto())
+      }, 1000)     
+    }
+    // eslint-disable-next-line 
+  }, [pomoSecond, pomoMinute, isActive, isOn])
+
+  // pomo timer end
+  useEffect(() => {
+    if (pomoMinute === 0 && pomoSecond === 0 && isActive && isOn) {
+      setTimeout(() => {
+        playToneBreak();
+        dispatch(setBreakMinuteByAmount(5))
+        setBreakActive(!breakActive)
+        setIsActive(!isActive)
+      }, 1000)
+    }
+    // eslint-disable-next-line 
+  }, [pomoSecond, pomoMinute, isActive, isOn])
+
+  // BREAK TIMER
+  // break timer second decrease
   useEffect(() => {
     if (breakActive && amount !== 0 && isOn) {
       const timer = setInterval(() => dispatch(decrementBreakSecond()), 1000);
 
-      if (breakSecond === 0) {
-        setTimeout(() => {
-          dispatch(decrementBreakMinute())
-        }, 1000)  
-      }
-
-      if (breakMinute === 0 && breakSecond === 0) {
-        setTimeout(() => {
-          clearInterval(timer)
-          playToneStart()
-          setBreakActive(!breakActive)
-          dispatch(setPomoMinuteByAmount(25))
-          setIsActive(!isActive)
-        }, 900)   
-      }
-
       return () => clearInterval(timer);
     }
     // eslint-disable-next-line 
-  }, [breakSecond, breakMinute, pomoMinute, breakActive, isActive, amount, isOn])
+  }, [breakActive, amount, isOn])
+
+  // breaktimer minute decrease
+  useEffect(() => {
+    if (breakSecond === 0 && breakMinute > 0 && breakActive && isOn) {
+      setTimeout(() => {
+        dispatch(decrementBreakMinute())
+      }, 1000)  
+    }
+    // eslint-disable-next-line 
+  }, [breakSecond, breakMinute, breakActive, isOn])
+
+  // break timer end
+  useEffect(() => {
+    if (breakMinute === 0 && breakSecond === 0 && breakActive && isOn) {
+      setTimeout(() => {
+        playToneStart()
+        dispatch(setPomoMinuteByAmount(25))
+        dispatch(decrementSession())
+        setIsActive(!isActive)
+        setBreakActive(!breakActive)
+      }, 1000)   
+    }
+    // eslint-disable-next-line 
+  }, [breakSecond, breakMinute, breakActive, isOn])
 
   // change html title to timer, when active
   useEffect(() => {
     const title = () => {
       breakActive 
-      ? document.title = `Break! ${displayBreakMinute}:${displayBreakSecond}` 
+      ? document.title = `Break! ${displayBreakMinute}:${displayBreakSecond} left` 
       : isActive 
-      ? document.title = `Focus! ${displayPomoMinute}:${displayPomoSecond}`
+      ? document.title = `Focus! ${displayPomoMinute}:${displayPomoSecond} left`
       : document.title = "Pomodoro-Timer"
     };
-
     title()
-
-    // if (isActive || breakActive) {
-    //   title()
-    // }
-    // if (!isActive && !breakActive) {
-    //   title()
-    // }
   })
 
   // sound break
@@ -120,8 +129,8 @@ function App() {
     setIsActive(false);
     setBreakActive(false);
     dispatch(setPomoMinuteByAmount(25));
-    dispatch(decrementPomoSecondByAmound(0));
-    
+    dispatch(decrementPomoSecondByAmount(0));
+    dispatch(setSessionByAmount(4));
   }
       
 return (  

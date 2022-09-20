@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit"
-import sessionSlice from "./sessionSlice.js"
+import sessionSlice from "./session.js"
 import pomoTimer from "./pomoTime.js"
 import breakTimer from "./breakTime.js"
 

@@ -11,12 +11,12 @@ export const breakTime = createSlice({
             state.valueMin -= 1;
         },
         setBreakMinuteByAmount: (state, action) => {
-            state.valueMin = action.payload
+            state.valueMin = action.payload;
         },
         decrementBreakSecond: (state) => {
             state.valueSec === 0 && state.valueMin === 0
             ? state.valueSec = 0
-            : state.valueSec === 0 && state.valueMin !== 0 
+            : state.valueSec === 0
             ? state.valueSec = 59
             : state.valueSec -= 1;
         }

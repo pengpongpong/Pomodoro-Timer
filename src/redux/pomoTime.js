@@ -8,14 +8,17 @@ export const pomoTime = createSlice({
     },
     reducers: {
         incrementPomoMinute: (state) => {
-            state.valueMin += 1
+            state.valueMin += 1;
         },
         decrementPomoMinute: (state) => {
-            console.log("decrementPomo")
-            state.valueMin === 0 ? state.valueMin = 0 : state.valueMin -= 1
+            state.valueMin === 0 ? state.valueMin = 0 : state.valueMin -= 1;
+        },
+        decrementPomoMinuteAuto: (state) => {
+            state.valueMin -= 1;
+            state.valueSec = 59;
         },
         setPomoMinuteByAmount: (state, action) => {
-            state.valueMin = action.payload
+            state.valueMin = action.payload;
         },
         decrementPomoSecond: (state) => {
             state.valueMin === 0 && state.valueSec === 0 
@@ -24,14 +27,14 @@ export const pomoTime = createSlice({
             ? state.valueSec = 59 
             : state.valueSec -= 1;
         }, 
-        decrementPomoSecondByAmound: (state, action) => {
-            state.valueSec = action.payload
+        decrementPomoSecondByAmount: (state, action) => {
+            state.valueSec = action.payload;
         }
     }
 })
 
 
-export const { incrementPomoMinute, decrementPomoMinute, setPomoMinuteByAmount, decrementPomoSecond, decrementPomoSecondByAmound } = pomoTime.actions;
+export const { incrementPomoMinute, decrementPomoMinute, setPomoMinuteByAmount, decrementPomoSecond, decrementPomoSecondByAmount, decrementPomoMinuteAuto } = pomoTime.actions;
 
 export const pomoMinuteCount = (state) => state.pomoMinute.valueMin;
 export const pomoSecondCount = (state) => state.pomoSecond.valueSec;

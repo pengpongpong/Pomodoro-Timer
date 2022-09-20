@@ -32,17 +32,13 @@ body {
     box-shadow: 0 0 2px 1px darken(lime, 10%),
                 0 0 2px 4px $green,
                 0 0 2px 8px $darkenGreen;
-}
 
-@media only screen and (max-width: 1080px) {
-    .timer {
-        width: 80vw;
+    @media only screen and (max-width: 1080px) {               
+            width: 80vw;    
     }
-}
-
-@media only screen and (max-height: 1000px) {
-    .timer {
-        height: 50vh;
+    
+    @media only screen and (max-height: 1000px) {                   
+            height: 50vh;
     }
 }
 
@@ -62,7 +58,6 @@ body {
     text-transform: uppercase;
     display: grid;
     place-items: center;
-    transition: ease-in-out 1s;
 }
 
 .clock {
@@ -132,7 +127,7 @@ body {
 }
 
 .button:hover {
-    transition: ease-in-out 0.5s;
+    transition: ease-in-out .5s;
     transform: translateY(-0.25rem);
     box-shadow: 0 0 2px 4px $creamGreen,
                 0 0 2px 6px $green,

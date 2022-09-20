@@ -23,7 +23,6 @@ body {
   border: 1px solid #ADC2A9;
   box-shadow: 0 0 2px 1px #00cc00, 0 0 2px 4px #ADC2A9, 0 0 2px 8px #99A799;
 }
-
 @media only screen and (max-width: 1080px) {
   .timer {
     width: 80vw;
@@ -34,6 +33,7 @@ body {
     height: 50vh;
   }
 }
+
 .head {
   padding-top: 1rem;
   text-align: center;
@@ -49,7 +49,6 @@ body {
   text-transform: uppercase;
   display: grid;
   place-items: center;
-  transition: ease-in-out 1s;
 }
 
 .clock {
